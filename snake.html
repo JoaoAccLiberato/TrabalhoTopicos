@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Jogo Snake</title>
+</head>
+<body>
+    <p><a href="https://www.youtube.com/watch?v=Hua1OSXitdQ&ab_channel=ProgramadorBR">Link para jogo da cobrinha</a></p>
+    <canvas id="stage" width="600" height="600"></canvas>
+    <script type="text/javascript">
+
+        window.onload = function(){ // onload espera a página carregar
+
+            var stage = document.getElementById('stage'); //pega elemento do html pelo id
+            var ctx = stage.getContext("2d"); //para trabalhar com canvas, nós alteramos o contexto da página
+            document.addEventListener("keydown",keyPush);//vai esperar um evento e fazer alguma coisa. sempre que uma tecla for apertada
+            setInterval(game, 80); //define o intervalo para uma função ser chamada
+
+            const vel = 1; //quantas casas a cobra vai andar cada vez que a página for recarregada
+
+            var vx = vy = 0; //velocidade x e y que vai começar
+            var px = 10; //ponto onde vai começar a cobrina 
+            var py = 15;
+            var tp = 30; //quantas divisões terá
+            var qp = 20;
+            var ax = ay = 15; //posição inicial da maçã
+
+            var trail = [];//rastro da cobrinha
+            tail = 5; //tamanho da cauda
+
+            function game(){
+                px += vx;
+                py += vy;
+                if(px < 0){ //tratamento para quando a cobra passar dos limite da esqueda da tela
+                    px = qp -1;
+                }
+                if(px > qp - 1){ //tratamento para quando a cobra passar dos limite da direitra da tela
+                    px = 0;
+                } 
+                if(py < 0){ //tratamento para quando a cobra passar dos limite de cima da tela
+                    py = qp -1;
+                }
+                if(py > qp - 1){ //tratamento para quando a cobra passar dos limite de baixo da tela
+                    py = 0;
+                }
+
+                ctx.fillStyle = "black"; //define a cor
+                ctx.fillRect(0,0, stage.width, stage.height); //define qual objeto terá a cor
+
+                ctx.fillStyle = "red";
+                ctx.fillRect(ax*tp, ay*tp, tp,tp); //definindo a cor, posição e tamanho da maçã
+
+                ctx.fillStyle = "gray";
+                for(var i = 0; i < trail.length; i++){
+                    ctx.fillRect(trail[i].x*tp, trail[i].y*tp, tp,tp);
+                    if(trail[i].x == px && trail[i].y == py)
+                    { //fazendo o teste se a cabeça da cobrar bater no corpo dela
+                        vx = vy = 0;
+                        tail = 5;
+                    }
+                }
+
+                trail.push({x:px,y:py }) //posição atual. coloca a posição no último elemento do array
+                while(trail.length > tail){
+                    trail.shift() // tira o primeiro elemento do array para o rastro não ficar maior que a calda
+                }
+
+                if(ax == px && ay == py){ // acrescenta mais uma parte no rastro
+                    tail++; // acrescenta mais uma parte no rastro
+                    ax = Math.floor(Math.random()*qp);
+                    ay = Math.floor(Math.random()*qp); //muda a mação para uma posição aleatória
+                }
+
+            }      
+            
+            function keyPush(event){ //vai verificar qual evento foi chamado
+                
+                switch(event.keyCode){
+                    case 37: //tecla 37 é a tecla direcional esquerda
+                        vx = -vel;
+                        vy = 0;
+                        break;
+                    case 38: //tecla 37 é a tecla direcional cima
+                        vx = 0;
+                        vy = -vel;
+                        break;
+                    case 39: //tecla 37 é a tecla direcional direita
+                        vx = vel;
+                        vy = 0;
+                        break;
+                    case 40: //tecla 37 é a tecla direcional baixo
+                        vx = 0;
+                        vy = vel;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+        }
+    </script>
+    
+</body>
+</html>
