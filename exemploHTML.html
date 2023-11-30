@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            text-decoration: none;
+        }
+
+        body{
+            background-color: #ccc;
+            text-align: center;
+        }
+
+        #formulario ul{
+            text-align: center;
+            margin-top: 10px;
+            border: 1px solid black;
+        }
+        li{
+            display: inline-block;
+            margin: 5px 6px;
+        }
+
+        button{
+            font-size: 25px;
+            cursor: pointer;
+            padding: 0 2px;
+        }
+
+        h2{
+            margin-top: 10px;
+        }
+
+        #formulario, .classeResposta{
+            display: inline-block;
+            text-align: center;
+            border: 1px solid black;
+            width: 500px;
+            margin-top: 25px;
+        }
+
+        label{
+            text-align: left;
+        }
+
+        input{
+            width: 50%;
+            margin-top: 10px;
+        }
+
+        #cabecalho li{
+            border-right: 1px solid black;
+            padding-right: 5px;
+        }
+    </style>
+
+</head>
+<body>
+    <h2>Preencher Formulário</h2>
+
+    <div id="formulario">
+        <form action="" id="formFormulario">
+            <label for="">Nome do carro
+                <input type="text" name="valorCarro">
+            </label><br>
+
+            <label for="">Marca
+                <input type="text" name="valorMarca">
+            </label><br>
+
+            <label for="">Ano
+                <input type="number" name="valorAno" id="">
+            </label><br>
+
+            <label for="">modelo
+                <select name="valorModelo" class="idModelo"></select>
+            </label><br>
+
+            <button type="button" onclick="addArray()">Enviar Formulário</button>
+        </form>
+    </div>
+
+    <h2>Respostas do Formulário</h2>
+
+    <div class="classeResposta">
+        <ul id="cabecalho">
+            <li><b>Nome do carro</b></li>
+            <li><b>Marca</b></li>
+            <li><b>Ano</b></li>
+            <li><b>Modelo</b></li>
+        </ul>
+        <ul class="multiplicar"></ul>
+    </div>
+
+    <script>
+        let arrayModelo = [
+            {   
+                id: "Sedan",
+                modelo: "Sedan"
+            },
+            {
+                id: "Hatch",
+                modelo: "Hatch"
+            }
+        ];
+
+        let arrayCarro = [];
+
+        // função para colocar os valores no array
+        function addArray(){
+            let valor = document.getElementById("formFormulario");
+
+            let carro = valor.elements.valorCarro.value;
+            let marca = valor.elements.valorMarca.value;
+            let ano = valor.elements.valorAno.value;
+            let modelo = valor.elements.valorModelo.value;
+
+            let objetoArray = {
+                    carro: carro,
+                    marca: marca,
+                    ano: ano,
+                    modelo: modelo
+            };
+
+            if(carro !== '' && marca !== '' && ano !== '' && modelo !== ''){
+                arrayCarro.push(objetoArray);
+                preencherLista();
+            } else{
+                alert("preencher todos os campos");
+            }
+        }
+
+        // função para colocar valor no select
+        function geralSelect(nomeClasseHtml,bd,id,tipo){
+            const elemento = document.getElementsByClassName(nomeClasseHtml);
+        
+            Array.from(elemento).forEach(function (elemento){
+                bd.forEach(function (e){
+                    const optionElement = document.createElement("option");
+                    optionElement.value = e[id];
+                    optionElement.text = e[tipo];
+                    elemento.appendChild(optionElement);
+                });   
+            })  
+        }
+
+        // chama função para colocar valor no selec
+        geralSelect("idModelo",arrayModelo,"id","modelo");
+
+        function preencherLista() {
+            const lista = document.querySelector('.multiplicar');
+
+            // Limpa qualquer conteúdo existente na lista
+            lista.innerHTML = '';
+
+            // Itera sobre o arrayCarro e cria um novo <li> para cada objeto
+            arrayCarro.forEach(carro => {
+                // Cria elementos separados para cada propriedade
+                const itemCarro = document.createElement('li');
+                const itemMarca = document.createElement('li');
+                const itemAno = document.createElement('li');
+                const itemModelo = document.createElement('li');
+                const quebraDeLinha = document.createElement('br');
+
+                // Adiciona o texto a cada elemento
+                itemCarro.textContent = carro.carro;
+                itemMarca.textContent = carro.marca;
+                itemAno.textContent = carro.ano;
+                itemModelo.textContent = carro.modelo;
+
+                // Adiciona cada elemento à lista
+                lista.appendChild(itemCarro);
+                lista.appendChild(quebraDeLinha);
+                lista.appendChild(itemMarca);
+                lista.appendChild(quebraDeLinha);
+                lista.appendChild(itemAno);
+                lista.appendChild(quebraDeLinha);
+                lista.appendChild(itemModelo);
+                lista.appendChild(quebraDeLinha);
+            });
+
+
+        }
+
+            
+
+    </script>
+</body>
+</html>
